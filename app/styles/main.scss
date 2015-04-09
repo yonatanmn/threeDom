@@ -1,31 +1,55 @@
-// bower:scss
-// endbower
-
-body {
-  background: #fafafa;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
+body,
+html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden
 }
 
-.hero-unit {
-  margin: 50px auto 0 auto;
-  width: 300px;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  background-color: #eee;
-  border-radius: 6px;
-  padding: 60px;
-  h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
+
+#world {
+  -webkit-transition: .5s;
+  transition: .5s;
+  height: 100%
 }
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+.viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: #000
+
+  -webkit-perspective: 700px;
+}
+
+.camera {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: translate3d(0px, 0px, 700px)  skewX(0deg) skewY(0deg);
+  //rotateX(-15deg) rotateY(360.5deg) rotateZ(0deg)
+}
+
+.assembly {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform:  rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg);
+//translate3d(-38.79px, 725px, -739.55px)
+}
+
+.plane {
+  width: 2000px;
+  height: 700px;
+  margin-left: -1000px;
+  margin-top: -350px;
+  -webkit-backface-visibility: hidden;
+  background-blend-mode: multiply;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: translate3d(0px, -350px, -700px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg);
 }
