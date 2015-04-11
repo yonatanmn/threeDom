@@ -6,6 +6,9 @@ var GeneralUtils = function () {
     getArgs: function (args, startAt) {
       startAt = startAt || 0;
       return Array.prototype.slice.call(args, startAt);
+    },
+    toRadians: function (angle) {
+      return (angle * (Math.PI / 180)).toFixed(2);
     }
   }
 }();
