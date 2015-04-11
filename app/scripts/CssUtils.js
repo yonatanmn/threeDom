@@ -36,7 +36,7 @@ var CssUtils = function() {
     insert: function (node/*,base(),size(w,h)...*/) {
       node.style.cssText = GeneralUtils.getArgs(arguments,1).reduce(function (p,c) {
         return p + c
-      },'');
+      },node.style.cssText);
     },
 
     base: function() {
@@ -50,7 +50,7 @@ var CssUtils = function() {
       "margin-top:" + -(h / 2).toFixed(2) + "px;"
       );
     },
-    translate: function(x, y, z, rx, ry, rz, skx, sky) {
+    transform: function(x, y, z, rx, ry, rz, skx, sky) {
       return (
       vendorPrefix + "transform:" +
       "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px," + z.toFixed(2) + "px)" +
@@ -69,6 +69,9 @@ var CssUtils = function() {
     },
     perspective: function(a) {
       return vendorPrefix + "perspective:" + a + "px;"
+    },
+    bgColor: function (color) {
+      return "background:" + color + ";"
     },
     wa: function(a) {
       for (var b = 0, e = 0; e < L.length; e++) var p =
