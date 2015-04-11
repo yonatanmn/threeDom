@@ -2,6 +2,9 @@ $(document).ready(function () {
 
   var glance = [0, 0]; // up/down,left/right - in deg
 
+  function createWorld(){
+
+  }
 
   function updateLook(){
     var x = getRotationDegrees($('#camera'));
