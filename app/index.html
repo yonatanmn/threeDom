@@ -20,17 +20,33 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-  <div class="world">
-      <div id="viewport">
+      <div class="viewport">
         <div id="camera">
-          <div id="assembly">
+          <div id="world">
             <!-- Geometry elements inside here -->
+            <div class="plane middle-pic" style="    width: 100px;    height: 100px;    background-color: brown;"></div>
+            <!--<div class="plane diagonal-wall" style="background-color: rgba(122, 136, 194, 0.57);"></div>-->
             <div class="plane left-wall"></div>
             <div class="plane right-wall"></div>
-            <div class="plane right-wall"></div>
-            <div class="plane right-wall"></div>
+            <div class="plane front-wall"></div>
+            <div class="plane rear-wall"></div>
             <div class="plane floor"></div>
             <div class="plane ceiling"></div>
+
+
+            <div id="229" class="assembly"
+                 style="display: none;  position: absolute; left: 50%; top: 50%; -webkit-transform-style: preserve-3d; -webkit-transform: translate3d(600px, -500px, 1050px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg);">
+
+              <div id="230 floor1" class="plane"   style="width: 1400px; height: 500px; margin-left: -700px; margin-top: -250px;   -webkit-transform: translate3d(-200px, 0px, 0px) rotateX(90deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg); background: yellowgreen;"></div>
+              <div id="231 right1" class="plane"   style="width: 1000px; height: 600px; margin-left: -500px; margin-top: -300px;   -webkit-transform: translate3d(0px, -300px, -250px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg); background: grey;"></div>
+              <div id="232 left1" class="plane"    style="width: 1400px; height: 600px; margin-left: -700px; margin-top: -300px;   -webkit-transform: translate3d(-200px, -300px, 250px) rotateX(0deg) rotateY(180deg) rotateZ(0deg) skewX(0deg) skewY(0deg); background: teal;"></div>
+              <div id="233 ceiling1" class="plane" style="width: 1400px; height: 1000px; margin-left: -700px; margin-top: -500px;  -webkit-transform: translate3d(-200px, -600px, -250px) rotateX(270deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg); background: royalblue;"></div>
+              <div id="234 rear1" class="plane"    style="width: 500px; height: 600px; margin-left: -250px; margin-top: -300px;    -webkit-transform: translate3d(500px, -300px, 0px) rotateX(0deg) rotateY(270deg) rotateZ(0deg) skewX(0deg) skewY(0deg); background: hotpink;"></div>
+
+            </div>
+
+
+
           </div>
         </div>
       </div>
