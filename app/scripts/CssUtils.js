@@ -1,10 +1,44 @@
+function l() { //short for debugging;
+  console.log.apply(console, GeneralUtils.getArgs(arguments));
+}
+var GeneralUtils = function () {
+  return {
+    getArgs: function (args, startAt) {
+      startAt = startAt || 0;
+      return Array.prototype.slice.call(args, startAt);
+    }
+  }
+}();
+
+var HtmlUtils = function () {
+  return {
+    createElem: function (appendTo,id,className,type) {
+      type = type || 'div';
+      var el = document.createElement(type);
+      if (id) el.setAttribute("id", id);
+      if (className) el.className = className;
+      if(!(appendTo instanceof Element)) appendTo = document.querySelector(appendTo);
+      appendTo.insertBefore(el, appendTo.firstChild);
+      return el;
+    }
+  }
+}();
+
 var CssUtils = function() {
   var s = document.documentElement.style;
   var vendorPrefix =  (s.WebkitTransform !== undefined && "-webkit-") ||
     (s.MozTransform !== undefined && "-moz-") ||
     (s.msTransform !== undefined && "-ms-") || "";
+  var BG_BlendSupport = 1;
   BG_BlendSupport &= void 0 !== s.backgroundBlendMode;
+
   return {
+    insert: function (node/*,base(),size(w,h)...*/) {
+      node.style.cssText = GeneralUtils.getArgs(arguments,1).reduce(function (p,c) {
+        return p + c
+      },'');
+    },
+
     base: function() {
       return "position: absolute;left:50%;top:50%;" + vendorPrefix + "transform-style:preserve-3d;";
     },
