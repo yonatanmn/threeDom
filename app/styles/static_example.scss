@@ -1,10 +1,6 @@
+$perspective: 700px;
 
-body,
-html {
-  height: 100%;
-  margin: 0;
-  overflow: hidden
-}
+
 
 /*
 #world {
@@ -41,7 +37,7 @@ html {
 
 .plane {
   -webkit-backface-visibility: hidden;
-//  transform-origin: top left;
+  //  transform-origin: top left;
   background-blend-mode: multiply;
   position: absolute;
   left: 50%;

@@ -84,6 +84,8 @@ function Room(worldNode,position,dimensions,id) {
     new Triplet(-this.dim.w/2,0,0),
     new Triplet(0,90,0)
   );
+
+
   this.right = new Face(this,
     'blue',
     new Dimension2d(this.dim.l, this.dim.h),
@@ -134,7 +136,7 @@ function Room(worldNode,position,dimensions,id) {
 //function Face(parent, color, w,h,x,y,z,rx,ry,rz) {
 function Face(parent, color, dimensions,position,rotation) {
   this.node = HtmlUtils.createElem(parent.node,null,'face');
-  this.colour = color;
+  this.color = color;
   this.width = dimensions.w;
   this.height = dimensions.h;
   this.position = position;
