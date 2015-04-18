@@ -157,6 +157,14 @@ function Face(parent, color, dimensions,position,rotation) {
 }
 
 function Shape(parent, color, dimensions,position,rotation){
+  var cutter_top = 90;
+  var cutter_left = 65;
+  var cutter_rotation = 0;
+
+  var rad = GeneralUtils.toRadians(cutter_rotation);
+
+  var filler_left  =  -cutter_left*Math.cos(rad) -cutter_top*Math.sin(rad);
+  var filler_top =  cutter_left* Math.sin(rad) -cutter_top*Math.cos(rad);
 
   this.node = HtmlUtils.createElem(parent.node,null,'shape');
   this.color = color;
@@ -164,40 +172,32 @@ function Shape(parent, color, dimensions,position,rotation){
   this.height = dimensions.h;
   this.position = position;
   this.rotation = rotation;
-  CssUtils.insert(
-    this.node,
+  CssUtils.insert( this.node,
     CssUtils.base(),
     CssUtils.size(this.width,this.height),
+    //this formula (to find center) is not accurate
+    CssUtils.origin((cutter_top+100)/2,(cutter_left+100)/2,0),
     CssUtils.transform(this.position.x,this.position.y,this.position.z,this.rotation.x,this.rotation.y,this.rotation.z)
   );
-  var cutter = HtmlUtils.createElem(this.node,null,'cutter');
-  var cutter_top = -20;
-  var cutter_left = 20;
-  var cutter_rotation = -25;
 
-  CssUtils.insert(
-    cutter,
+  //testing!!!
+  var point = HtmlUtils.createElem(this.node,null,'point');
+  CssUtils.insert( point,
+    CssUtils.absolutePosition((cutter_top+100)/2,(cutter_left+100)/2)
+  );
+
+  var cutter = HtmlUtils.createElem(this.node,null,'cutter');
+  CssUtils.insert( cutter,
     CssUtils.absolutePosition(cutter_top,cutter_left),
     CssUtils.transform(0,0,0,0,0,cutter_rotation)
   );
+
   var filler = HtmlUtils.createElem(cutter,null,'filler');
-
-  var rad = GeneralUtils.toRadians(cutter_rotation);
-
-  var filler_left  =  -cutter_left*Math.cos(rad) -cutter_top*Math.sin(rad);
-  var filler_top =  cutter_left* Math.sin(rad) -cutter_top*Math.cos(rad);
-  //
-  //var filler_top  =  -cutter_top*Math.cos(rad);
-  //var filler_left =  -cutter_top*Math.sin(rad);
-
-
   CssUtils.insert(
     filler,
     CssUtils.absolutePosition(filler_top,filler_left),
     CssUtils.transform(0,0,0,0,0,-cutter_rotation)
   );
-
-  //HtmlUtils.createShape(this.left.node)
 
 }
 

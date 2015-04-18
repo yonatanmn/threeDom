@@ -37,16 +37,13 @@ html {
       position:absolute;
     }
 
-    /*&::after{
-      content:'';
-      background-image: url(attr(data-img));
-      background-size: cover;
-      width:100%;
-      height: 100%;
-      display:block;
-      position:absolute;
-      //    background-size: ;
-    }*/
-  }
 
+
+  }
+  //for testing
+  .point{
+    height: 6px;
+    width: 6px;
+    background: red;
+  }
 }

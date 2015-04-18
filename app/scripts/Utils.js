@@ -127,9 +127,14 @@ var CssUtils = function() {
         ))
       )
     },
-    origin: function(a, c, e) {
-      return vendorPrefix + "transform-origin:" + a.toFixed(2) + "px " + c.toFixed(2) + "px " + e.toFixed(2) + "px;"
+    origin: function(x, y, z) {
+      return this.strProperties(
+        vendorPrefix + "transform-origin",
+        this.unit(x, '%') + this.unit(y, '%') + this.unit(z, 'px')
+      );
+      //return vendorPrefix + "transform-origin:" + x.toFixed(2) + "px " + y.toFixed(2) + "px " + z.toFixed(2) + "px;"
     },
+
     V: function(a) {
       return a ? "" : vendorPrefix + "backface-visibility:hidden;"
     },
