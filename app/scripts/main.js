@@ -161,10 +161,10 @@ function Shape(parent, color, dimensions,position,rotation){
   var cutter_left = 65;
   var cutter_rotation = 0;
 
-  var rad = GeneralUtils.toRadians(cutter_rotation);
+  var rotTrigo = GeneralUtils.getTrigo(cutter_rotation);
 
-  var filler_left  =  -cutter_left*Math.cos(rad) -cutter_top*Math.sin(rad);
-  var filler_top =  cutter_left* Math.sin(rad) -cutter_top*Math.cos(rad);
+  var filler_left  =  -cutter_left * rotTrigo.cos -cutter_top * rotTrigo.sin;
+  var filler_top =  cutter_left * rotTrigo.sin -cutter_top * rotTrigo.cos;
 
   this.node = HtmlUtils.createElem(parent.node,null,'shape');
   this.color = color;
@@ -222,11 +222,6 @@ window.onload = function() {
 
     var pos = world.position;
     var rot = cam.rotation;
-    //var xo = Math.sin(rot.z * 0.0174532925);
-    //var yo = Math.cos(rot.z * 0.0174532925);
-    //viewport.camera.position.x -= xo * speed;
-    //viewport.camera.position.y -= yo * speed;
-    //var toRad = GeneralUtils.toRadians;
 
     var dir_angles;
     switch (direction) {
@@ -244,10 +239,10 @@ window.onload = function() {
         break;
     }
 
-    var rot_rad = GeneralUtils.toRadians(rot.y + dir_angles);
+    var rotTrigo = GeneralUtils.getTrigo(rot.y + dir_angles);
 
-    pos.x -= speed*Math.sin(rot_rad);
-    pos.z += speed*Math.cos(rot_rad);
+    pos.x -= speed * rotTrigo.sin;
+    pos.z += speed * rotTrigo.cos;
 
     world.updatePosition(pos);
 

@@ -16,7 +16,16 @@ var GeneralUtils = function () {
     },
 
     toRadians: function (angle) {
-      return (angle * (Math.PI / 180)).toFixed(2);
+      return (angle * (Math.PI / 180));
+    },
+
+    getTrigo: function (angle){
+      var rad = this.toRadians(angle);
+      return {
+        sin:Math.sin(rad),
+        cos:Math.cos(rad)
+      };
+
     },
 
     stringCreator: function (structure) {
