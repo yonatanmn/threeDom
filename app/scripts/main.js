@@ -118,6 +118,12 @@ function Room(worldNode,position,dimensions,id) {
   );
   //this.floor = new Face(this,'green',this.dim.l,this.dim.w,0,((this.dim.h/2)),0,90,0,0);
 
+  var test = new Shape(this.front,
+    'black',
+    new Dimension2d(100,100),
+    new Triplet(150,150,0),
+    new Triplet(0,0,0)
+  );
 
 
 }
@@ -150,6 +156,51 @@ function Face(parent, color, dimensions,position,rotation) {
   );
 }
 
+function Shape(parent, color, dimensions,position,rotation){
+
+  this.node = HtmlUtils.createElem(parent.node,null,'shape');
+  this.color = color;
+  this.width = dimensions.w;
+  this.height = dimensions.h;
+  this.position = position;
+  this.rotation = rotation;
+  CssUtils.insert(
+    this.node,
+    CssUtils.base(),
+    CssUtils.size(this.width,this.height),
+    CssUtils.transform(this.position.x,this.position.y,this.position.z,this.rotation.x,this.rotation.y,this.rotation.z)
+  );
+  var cutter = HtmlUtils.createElem(this.node,null,'cutter');
+  var cutter_top = -20;
+  var cutter_left = 20;
+  var cutter_rotation = -25;
+
+  CssUtils.insert(
+    cutter,
+    CssUtils.absolutePosition(cutter_top,cutter_left),
+    CssUtils.transform(0,0,0,0,0,cutter_rotation)
+  );
+  var filler = HtmlUtils.createElem(cutter,null,'filler');
+
+  var rad = GeneralUtils.toRadians(cutter_rotation);
+
+  var filler_left  =  -cutter_left*Math.cos(rad) -cutter_top*Math.sin(rad);
+  var filler_top =  cutter_left* Math.sin(rad) -cutter_top*Math.cos(rad);
+  //
+  //var filler_top  =  -cutter_top*Math.cos(rad);
+  //var filler_left =  -cutter_top*Math.sin(rad);
+
+
+  CssUtils.insert(
+    filler,
+    CssUtils.absolutePosition(filler_top,filler_left),
+    CssUtils.transform(0,0,0,0,0,-cutter_rotation)
+  );
+
+  //HtmlUtils.createShape(this.left.node)
+
+}
+
 
 
 /*-----------------------*/
@@ -171,7 +222,6 @@ window.onload = function() {
 
     var pos = world.position;
     var rot = cam.rotation;
-l(rot)
     //var xo = Math.sin(rot.z * 0.0174532925);
     //var yo = Math.cos(rot.z * 0.0174532925);
     //viewport.camera.position.x -= xo * speed;
@@ -196,8 +246,8 @@ l(rot)
 
     var rot_rad = GeneralUtils.toRadians(rot.y + dir_angles);
 
-    pos.z += speed*Math.cos(rot_rad)
-    pos.x -= speed*Math.sin(rot_rad)
+    pos.x -= speed*Math.sin(rot_rad);
+    pos.z += speed*Math.cos(rot_rad);
 
     world.updatePosition(pos);
 

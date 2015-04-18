@@ -6,88 +6,47 @@ html {
   overflow: hidden
 }
 
-/*
-#world {
-  -webkit-transition: .5s;
-  transition: .5s;
-  height: 100%
-}*/
+.shape{
+  border: 1px solid;
 
-#viewport {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background: #000;
 
-  -webkit-perspective: $perspective;
-}
+  position:relative;
+  overflow:hidden;
+  box-sizing: border-box;
 
-#camera {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transform: translateZ($perspective) rotateX(-1deg) rotateY(-25deg);
-}
 
-#world {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transform:  translate3d(0px,0px,0px);
-}
+  .cutter{
+    border: 1px solid;
+    box-sizing: border-box;
 
-.plane {
-  -webkit-backface-visibility: hidden;
-//  transform-origin: top left;
-  background-blend-mode: multiply;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg);
-}
+    overflow:hidden;
+    width:100%;
+    height: 100%;
+    display:block;
+    position:absolute;
 
-[class$="wall"]{
-  width: 2000px;
-  height: 700px;
-  margin-left: -1000px;
-  margin-top: -350px;
-}
+    .filler{
+      border: 1px solid;
+      box-sizing: border-box;
 
-.floor,.ceiling {
-  width: 2000px;
-  height: 2000px;
-  margin-left: -1000px;
-  margin-top: -1000px;
-}
-.diagonal-wall{
-  display: none;
-  -webkit-transform: translate3d(000px, 0px, 000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-}
-.left-wall{
-  -webkit-transform: translate3d(-1000px, 0px, 000px) rotateX(0deg) rotateY(90deg) rotateZ(0deg);
-  background-color: rgba(68, 255, 55, 0.71);
-}
-.right-wall{
-  -webkit-transform: translate3d(1000px, 0px, 0px) rotateX(0deg) rotateY(-90deg) rotateZ(0deg);
-  background-color: rgba(255, 242, 109, 0.67);
-}
-.front-wall{
-  -webkit-transform: translate3d(0px, 0px, -1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-  background-color: rgba(255, 255, 255, 0.79);
-}
-.rear-wall{
-  -webkit-transform: translate3d(0px, 00px, 1000px) rotateX(180deg) rotateY(0deg) rotateZ(0deg);
-  background-color: rgba(255, 147, 46, 0.71);
-}
-.floor{
-  -webkit-transform: translate3d(0px, 350px, 0px) rotateX(90deg) rotateY(0deg) rotateZ(0deg);
-  background-color: rgba(255, 0, 0, 0.80);
-}
-.ceiling{
-  -webkit-transform: translate3d(0px, -350px, 0px) rotateX(-90deg) rotateY(0deg) rotateZ(0deg);
-  background-color: rgba(0, 23, 255, 0.75);
+      background-image: url("http://www.hintsandthings.co.uk/garden/cats.h1.jpg");
+      background-size: cover;
+      width:100%;
+      height: 100%;
+      display:block;
+      position:absolute;
+    }
+
+    /*&::after{
+      content:'';
+      background-image: url(attr(data-img));
+      background-size: cover;
+      width:100%;
+      height: 100%;
+      display:block;
+      position:absolute;
+      //    background-size: ;
+    }*/
+  }
+
 }
