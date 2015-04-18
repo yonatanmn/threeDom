@@ -1,14 +1,37 @@
 function l() { //short for debugging;
   console.log.apply(console, GeneralUtils.getArgs(arguments));
 }
+
 var GeneralUtils = function () {
   return {
     getArgs: function (args, startAt) {
       startAt = startAt || 0;
       return Array.prototype.slice.call(args, startAt);
     },
+
+    //returns args always as array of arrays (if args[0] is not array, take args as one array)
+    getArrayArgs: function (args, startAt) {
+      var arrayArgs = GeneralUtils.getArgs(args, startAt);
+      return Array.isArray(arrayArgs[0])? arrayArgs: [arrayArgs];
+    },
+
     toRadians: function (angle) {
       return (angle * (Math.PI / 180)).toFixed(2);
+    },
+
+    stringCreator: function (structure) {
+      return function () {
+        var args = GeneralUtils.getArrayArgs(arguments);
+
+        function property(prop,content) {
+          if(typeof prop !== 'string') throw 'property should be a string';
+          if(typeof content !== 'string') throw 'content should be a string';
+          return structure(prop, content);
+        }
+        return args.reduce(function(p,c){
+          return p + property(c[0],c[1]);
+        },'');
+      }
     }
   }
 }();
@@ -23,6 +46,11 @@ var HtmlUtils = function () {
       if(!(appendTo instanceof Element)) appendTo = document.querySelector(appendTo);
       appendTo.insertBefore(el, appendTo.firstChild);
       return el;
+    },
+
+    createShape: function (parent,id) {
+      //var el = this.createElem(parent,id,'shape');
+      //var cutter = this.createElem(el,null,'cutter');
     }
   }
 }();
@@ -42,26 +70,61 @@ var CssUtils = function() {
       },node.style.cssText);
     },
 
-    base: function() {
-      return "position: absolute;left:50%;top:50%;" + vendorPrefix + "transform-style:preserve-3d;";
+    unit: function (size,defaultUnit) {
+      size = size || 0;
+      if (typeof size === 'string') {return size}
+      if (typeof defaultUnit !=='string') throw 'defaultUnit is not a string';
+      return size.toFixed(2) + defaultUnit;
     },
-    size: function(w, h) {
+
+    //gets two params (prop,content) or a list of arrays ([prop,content],[..],[..]) and returns a css string
+    strProperties:  GeneralUtils.stringCreator(function(prop,content){
+        return prop + ":" + content + ";"
+    }),
+    strInnerProperties:  GeneralUtils.stringCreator(function(prop,content){
+        return prop + "(" + content + ")"
+    }),
+
+    base: function() {
       return (
-      "width:" + w.toFixed(2) + "px;" +
-      "height:" + h.toFixed(2) + "px;" +
-      "margin-left:" + -(w / 2).toFixed(2) + "px;" +
-      "margin-top:" + -(h / 2).toFixed(2) + "px;"
+        this.absolutePosition(50,50) +
+        this.strProperties(
+          [vendorPrefix + "transform-style","preserve-3d"]
+        )
       );
     },
-    transform: function(x, y, z, rx, ry, rz, skx, sky) {
+
+    absolutePosition: function (top,left) {
       return (
-      vendorPrefix + "transform:" +
-      "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px," + z.toFixed(2) + "px)" +
-      "rotateX(" + rx.toFixed(2) + "deg)" +
-      "rotateY(" + ry.toFixed(2) + "deg)" +
-      "rotateZ(" + rz.toFixed(2) + "deg)" +
-      "skewX(" + (skx || 0) + "deg)" +
-      "skewY(" + (sky || 0) + "deg);"
+        this.strProperties(
+          ["position","absolute"],
+          ["top",this.unit(top,'%')],
+          ["left",this.unit(left,'%')]
+        )
+      );
+    },
+
+    size: function(w, h) {
+      return (
+      this.strProperties(
+        ["width",this.unit(w,'px')],
+        ["height",this.unit(h,'px')],
+        ["margin-left",this.unit(-(w / 2),'px')],
+        ["margin-top",this.unit(-(h / 2),'px')])
+      );
+    },
+    transform: function (x, y, z, rx, ry, rz, skx, sky) {
+      return (
+
+      this.strProperties(vendorPrefix + "transform",
+        this.strInnerProperties(
+          ["translate3d", [this.unit(x, 'px'), this.unit(y, 'px'), this.unit(z, 'px')].toString()],
+          ["rotateX", this.unit(rx, 'deg')],
+          ["rotateY", this.unit(ry, 'deg')],
+          ["rotateZ", this.unit(rz, 'deg')],
+          ["skewX", this.unit(skx, 'deg')],
+          ["skewY", this.unit(sky, 'deg')]
+        ))
       )
     },
     origin: function(a, c, e) {
@@ -71,10 +134,10 @@ var CssUtils = function() {
       return a ? "" : vendorPrefix + "backface-visibility:hidden;"
     },
     perspective: function(a) {
-      return vendorPrefix + "perspective:" + a + "px;"
+      return this.strProperties(vendorPrefix + "perspective", this.unit(a, 'px'));
     },
     bgColor: function (color) {
-      return "background:" + color + ";"
+      return this.strProperties("background", color);
     },
     wa: function(a) {
       for (var b = 0, e = 0; e < L.length; e++) var p =
