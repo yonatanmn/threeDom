@@ -118,10 +118,10 @@ function Room(worldNode,position,dimensions,id) {
   );
   //this.floor = new Face(this,'green',this.dim.l,this.dim.w,0,((this.dim.h/2)),0,90,0,0);
 
-  var test = new Shape(this.front,
+  var test = new EqTri(this.front,
     'black',
     new Dimension2d(100,100),
-    new Triplet(150,150,0),
+    new Triplet(50,50,0),
     new Triplet(0,0,0)
   );
 
@@ -156,10 +156,10 @@ function Face(parent, color, dimensions,position,rotation) {
   );
 }
 
-function Shape(parent, color, dimensions,position,rotation){
-  var cutter_top = 90;
-  var cutter_left = 65;
-  var cutter_rotation = 0;
+function Shape(parent, color, dimensions,position,rotation,cutterPos,cutterRot){
+  var cutter_top = cutterPos.top;
+  var cutter_left = cutterPos.left;
+  var cutter_rotation = cutterRot;
 
   var rotTrigo = GeneralUtils.getTrigo(cutter_rotation);
 
@@ -181,24 +181,47 @@ function Shape(parent, color, dimensions,position,rotation){
   );
 
   //testing!!!
-  var point = HtmlUtils.createElem(this.node,null,'point');
+ /* var point = HtmlUtils.createElem(this.node,null,'point');
   CssUtils.insert( point,
     CssUtils.absolutePosition((cutter_top+100)/2,(cutter_left+100)/2)
-  );
+  );*/
 
-  var cutter = HtmlUtils.createElem(this.node,null,'cutter');
-  CssUtils.insert( cutter,
+   this.cutter = HtmlUtils.createElem(this.node,null,'cutter');
+  CssUtils.insert( this.cutter,
     CssUtils.absolutePosition(cutter_top,cutter_left),
     CssUtils.transform(0,0,0,0,0,cutter_rotation)
   );
 
-  var filler = HtmlUtils.createElem(cutter,null,'filler');
+  var filler = HtmlUtils.createElem(this.cutter,null,'filler');
   CssUtils.insert(
     filler,
     CssUtils.absolutePosition(filler_top,filler_left),
     CssUtils.transform(0,0,0,0,0,-cutter_rotation)
   );
 
+}
+
+//EquilateralTriangle
+function EqTri (parent, color, dimensions,position,rotation){
+  this.node = HtmlUtils.createElem(parent.node,null,'eqTri');
+  this.color = color;
+  this.width = dimensions.w;
+  this.height = dimensions.h;
+  this.position = position;
+  this.rotation = rotation;
+
+  var top = Math.sqrt(2*Math.pow(this.width,2));
+
+  var left = new Shape(parent, color, dimensions,position,rotation,{top:31.8,left:68.0},30)
+  position.x += 100;
+    var right = new Shape(parent, color, dimensions,position,rotation,{top:31.8,left:-68.0},-30)
+l(CssUtils.origin('bottom ', 'left',' '))
+  CssUtils.insert(left.cutter,
+    CssUtils.absolutePosition(0,50),
+    CssUtils.origin('bottom ', 'left',' ')
+  );
+
+  //HtmlUtils.createElem(this.node,null,'cutter');
 }
 
 

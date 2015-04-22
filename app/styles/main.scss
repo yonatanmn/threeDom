@@ -7,8 +7,8 @@ html {
 }
 
 .shape{
-  border: 1px solid;
-
+//  border: 1px solid;
+background: blue;
 
   position:relative;
   overflow:hidden;
@@ -16,7 +16,10 @@ html {
 
 
   .cutter{
-    border: 1px solid;
+//    background: #ffef0d;
+
+
+//    border: 1px solid;
     box-sizing: border-box;
 
     overflow:hidden;
@@ -26,7 +29,7 @@ html {
     position:absolute;
 
     .filler{
-      border: 1px solid;
+//      border: 1px solid;
       box-sizing: border-box;
 
       background-image: url("http://www.hintsandthings.co.uk/garden/cats.h1.jpg");
