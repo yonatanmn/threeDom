@@ -73,7 +73,8 @@ var CssUtils = function() {
   BG_BlendSupport &= void 0 !== s.backgroundBlendMode;
 
   return {
-    insert: function (node/*,base(),size(w,h)...*/) {
+    inject: function (node/*,base(),size(w,h)...*/) {
+      l(arguments)
       node.style.cssText = GeneralUtils.getArgs(arguments,1).reduce(function (p,c) {
         return p + c
       },node.style.cssText);
@@ -136,13 +137,21 @@ var CssUtils = function() {
         ))
       )
     },
+
     origin: function(x, y, z) {
       return this.strProperties(
         vendorPrefix + "transform-origin",
-        this.unit(x, '%') + this.unit(y, '%') + this.unit(z, 'px')
+        this.unit(x, '%') + ' ' + this.unit(y, '%') + ' ' + this.unit(z, 'px')
       );
-      //return vendorPrefix + "transform-origin:" + x.toFixed(2) + "px " + y.toFixed(2) + "px " + z.toFixed(2) + "px;"
     },
+
+    bgPosition: function (x, y) {
+      return this.strProperties(
+        "background-position",
+        this.unit(x, '%') + ' ' + this.unit(y, '%')
+      )
+    },
+
 
     V: function(a) {
       return a ? "" : vendorPrefix + "backface-visibility:hidden;"
@@ -182,13 +191,13 @@ var CssUtils = function() {
       BG_BlendSupport && h.length && (f += "background-blend-mode: " + h.join() + ";");
       return f
     },
-    clone: function(a) {
+    /*clone: function(a) {
       var b;
       a instanceof v && (b = new v);
       a instanceof q && (b = new q(a.qa, a.width, a.height, a.position.x, a.position.y));
       if (b && b.i)
         for (var c = 0; c < a.i.length; c++) b.add(CssUtils.clone(a.i[c]));
       return b
-    }
+    }*/
   }
 }();
