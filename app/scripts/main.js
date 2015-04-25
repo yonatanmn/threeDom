@@ -32,13 +32,15 @@ Camera.prototype = {
 function World(cameraNode) {
   this.node = HtmlUtils.createElem(cameraNode, 'world2');
   this.position = new Triplet();
-  CssUtils.insert( this.node, CssUtils.base() );
+  CssUtils.inject( this.node, CssUtils.base() );
 }
 
 World.prototype = {
+  constructor:World,
+
   updatePosition: function (pos) {
     this.position = pos;
-    CssUtils.insert(this.node, CssUtils.transform(pos.x,pos.y,pos.z,0,0,0) );
+    CssUtils.inject(this.node, CssUtils.transform(pos.x,pos.y,pos.z,0,0,0) );
   },
   createRoom: function (position,dimensions,id) {
     new Room(this.node,position,dimensions,id)
@@ -51,57 +53,48 @@ function Room(worldNode,position,dimensions,id) {
   this.node = HtmlUtils.createElem(worldNode, id ,'room');
   this.position = position || new Triplet();
   this.dim = dimensions || new Dimension3d();
-  CssUtils.insert(
+  CssUtils.inject(
     this.node,
     CssUtils.base(),
     CssUtils.transform(this.position.x,this.position.y,this.position.z,0,0,0)
   );
 
-  this.left = new Face(this,
-    'yellow',
+  this.left = new Square(this,
     new Dimension2d(this.dim.l, this.dim.h),
-    new Triplet(-this.dim.w/2,0,0),
-    new Triplet(0,90,0)
-  );
-
-
-  this.right = new Face(this,
-    'blue',
+    new Triplet(-this.dim.w / 2, 0, 0),
+    new Triplet(0, 90, 0),
+    'yellow');
+  this.right = new Square(this,
     new Dimension2d(this.dim.l, this.dim.h),
-    new Triplet(this.dim.w/2,0,0),
-    new Triplet(0,-90,0)
-  );
-  this.front = new Face(this,
-    'brown',
-    new Dimension2d(this.dim.w,this.dim.h),
-    new Triplet(0,0,-this.dim.l/2),
-    new Triplet(0,0,0)
-  );
-  this.rear = new Face(this,
-    'pink',
-    new Dimension2d(this.dim.w,this.dim.h),
-    new Triplet(0,0,this.dim.l/2),
-    new Triplet(180,0,0)
-  );
-  this.ceiling = new Face(this,
-    'purple',
-    new Dimension2d(this.dim.w,this.dim.l),
-    new Triplet(0,-this.dim.h/2,0),
-    new Triplet(-90,0,0)
-  );
-  this.floor = new Face(this,
-    'green',
-    new Dimension2d(this.dim.w,this.dim.l),
-    new Triplet(0,this.dim.h/2,0),
-    new Triplet(90,0,0)
-  );
-  //this.floor = new Face(this,'green',this.dim.l,this.dim.w,0,((this.dim.h/2)),0,90,0,0);
+    new Triplet(this.dim.w / 2, 0, 0),
+    new Triplet(0, -90, 0),
+    'blue');
+  this.front = new Square(this,
+    new Dimension2d(this.dim.w, this.dim.h),
+    new Triplet(0, 0, -this.dim.l / 2),
+    new Triplet(0, 0, 0),
+    'brown');
+  this.rear = new Square(this,
+    new Dimension2d(this.dim.w, this.dim.h),
+    new Triplet(0, 0, this.dim.l / 2),
+    new Triplet(180, 0, 0),
+    'pink');
+  this.ceiling = new Square(this,
+    new Dimension2d(this.dim.w, this.dim.l),
+    new Triplet(0, -this.dim.h / 2, 0),
+    new Triplet(-90, 0, 0),
+    'purple');
+  this.floor = new Square(this,
+    new Dimension2d(this.dim.w, this.dim.l),
+    new Triplet(0, this.dim.h / 2, 0),
+    new Triplet(90, 0, 0),
+    'green');
+
 
   var test = new EqTri(this.front,
-    'black',
-    new Dimension2d(100,100),
-    new Triplet(50,50,0),
-    new Triplet(0,0,0)
+    new Dimension2d(100, 100),
+    new Triplet(50, 50, 0),
+    new Triplet(0, 0, 0)
   );
 
 
@@ -110,7 +103,7 @@ function Room(worldNode,position,dimensions,id) {
 /*World.prototype = {
   updatePosition: function (pos) {
     this.position = pos;
-    CssUtils.insert(this.node, CssUtils.transform(pos.x,pos.y,pos.z,0,0,0) );
+    CssUtils.inject(this.node, CssUtils.transform(pos.x,pos.y,pos.z,0,0,0) );
   }
 };*/
 
