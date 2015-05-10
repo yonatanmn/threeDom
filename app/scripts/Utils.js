@@ -54,9 +54,10 @@ var GeneralUtils = function () {
      * @returns {XY}
      */
     getNewPointByDistAndAngle: function (start,deg,dist) {
+      var rad = GeneralUtils.toRadians(deg)
       return new XY(
-        start.x + Math.cos(deg) * dist,
-        start.y + Math.sin(deg) * dist
+        start.x + Math.cos(rad) * dist,
+        start.y + Math.sin(rad) * dist
       )
     },
 

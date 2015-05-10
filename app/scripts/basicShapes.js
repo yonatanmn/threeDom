@@ -215,7 +215,7 @@ function ClippedElement(parent,dimensions,position,rotation,coordinates,texture)
   this.rear = new Face(
     new Dimension2d(this.width,this.height),
     new XYZ(0,0,-this.depth/2),
-    new XYZ(0, 180, 0)
+    new XYZ(0, 0, 0)
   );
 
   //inser front and rear
