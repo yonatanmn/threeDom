@@ -223,7 +223,8 @@ function ClippedElement(parent,dimensions,position,rotation,coordinates,texture)
     insert.call(this,face);
     //add clip path to front and rear
     CssUtils.inject(face.node,
-      CssUtils.clipPath(coordinates)
+      CssUtils.clipPath(coordinates),
+    CssUtils.bgImageCover(('http://i.imgur.com/IEiqEV0.jpg'))
     );
   }.bind(this));
 
