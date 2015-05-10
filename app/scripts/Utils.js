@@ -1,4 +1,4 @@
-function l() { //short for debugging;
+function log() { //short for debugging;
   console.log.apply(console, GeneralUtils.getArgs(arguments));
 }
 
@@ -19,13 +19,45 @@ var GeneralUtils = function () {
       return (angle * (Math.PI / 180));
     },
 
+    toDegrees: function (rads) {
+      return (rads * (180/Math.PI))
+    },
+
     getTrigo: function (angle){
       var rad = this.toRadians(angle);
       return {
         sin:Math.sin(rad),
         cos:Math.cos(rad)
       };
+    },
 
+    pointsDistance: function (a,b) {
+      var deltaX = b.x - a.x;
+      var deltaY = b.y - a.y;
+      var degrees =  GeneralUtils.toDegrees(Math.atan(deltaY/deltaX));
+      //atan returns degree between -90 to 90, this fixes it:
+      degrees += deltaX<0? 180 : 0;
+      return {
+        delX : deltaX,
+        delY : deltaY,
+        dist : Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)),
+        deg: degrees
+
+      }
+    },
+
+    /**
+     *
+     * @param start (XY)
+     * @param deg
+     * @param dist
+     * @returns {XY}
+     */
+    getNewPointByDistAndAngle: function (start,deg,dist) {
+      return new XY(
+        start.x + Math.cos(deg) * dist,
+        start.y + Math.sin(deg) * dist
+      )
     },
 
     stringCreator: function (structure) {
@@ -74,7 +106,7 @@ var CssUtils = function() {
 
   return {
     inject: function (node/*,base(),size(w,h)...*/) {
-      l(arguments)
+      //l(arguments)
       node.style.cssText = GeneralUtils.getArgs(arguments,1).reduce(function (p,c) {
         return p + c
       },node.style.cssText);
@@ -95,6 +127,16 @@ var CssUtils = function() {
         return prop + "(" + content + ")"
     }),
 
+    absolutePosition: function (top,left) {
+      return (
+        this.strProperties(
+          ["position","absolute"],
+          ["top",this.unit(top,'%')],
+          ["left",this.unit(left,'%')]
+        )
+      );
+    },
+
     base: function() {
       return (
         this.absolutePosition(50,50) +
@@ -104,13 +146,34 @@ var CssUtils = function() {
       );
     },
 
-    absolutePosition: function (top,left) {
-      return (
-        this.strProperties(
-          ["position","absolute"],
-          ["top",this.unit(top,'%')],
-          ["left",this.unit(left,'%')]
+    bgPosition: function (x, y) {
+      return this.strProperties(
+        "background-position",
+        this.unit(x, '%') + ' ' + this.unit(y, '%')
+      )
+    },
+
+    bgImageCover: function(url) {
+      return this.strProperties(
+        ['background-size', 'cover'],
+        ['background-image', this.strInnerProperties('url',url)]
+      )
+    },
+
+    clipPath: function (coordinates) {
+      return(
+        this.strProperties(vendorPrefix+ 'clip-path',
+          this.strInnerProperties(
+            'polygon', coordinates.map(function(c){return c[0]+'% '+c[1]+'%'}).toString()
+          )
         )
+      );
+    },
+
+    origin: function(x, y, z) {
+      return this.strProperties(
+        vendorPrefix + "transform-origin",
+        this.unit(x, '%') + ' ' + this.unit(y, '%') + ' ' + this.unit(z, 'px')
       );
     },
 
@@ -123,6 +186,7 @@ var CssUtils = function() {
         ["margin-top",this.unit(-(h / 2),'px')])
       );
     },
+
     transform: function (x, y, z, rx, ry, rz, skx, sky) {
       return (
 
@@ -138,26 +202,30 @@ var CssUtils = function() {
       )
     },
 
-    origin: function(x, y, z) {
-      return this.strProperties(
-        vendorPrefix + "transform-origin",
-        this.unit(x, '%') + ' ' + this.unit(y, '%') + ' ' + this.unit(z, 'px')
-      );
-    },
+    transform2: function (x, y, z, rx, ry, rz, skx, sky) {
+      return (
 
-    bgPosition: function (x, y) {
-      return this.strProperties(
-        "background-position",
-        this.unit(x, '%') + ' ' + this.unit(y, '%')
+        this.strProperties(vendorPrefix + "transform",
+          this.strInnerProperties(
+            ["translate3d", [this.unit(x, 'px'), this.unit(y, 'px'), this.unit(z, 'px')].toString()],
+            ["rotateX", this.unit(rx, 'deg')],
+            ["rotateY", this.unit(ry, 'deg')],
+            ["rotateZ", this.unit(rz, 'deg')],
+            ["skewX", this.unit(skx, 'deg')],
+            ["skewY", this.unit(sky, 'deg')]
+          ))
       )
     },
 
 
-    V: function(a) {
-      return a ? "" : vendorPrefix + "backface-visibility:hidden;"
+
+    backface: function(hide) {
+      var visibility = hide? 'hidden':'visible';
+      return this.strProperties(vendorPrefix + "backface-visibility",visibility);
+      //return a ? "" : vendorPrefix + "backface-visibility:hidden;"
     },
-    perspective: function(a) {
-      return this.strProperties(vendorPrefix + "perspective", this.unit(a, 'px'));
+    perspective: function(perspective) {
+      return this.strProperties(vendorPrefix + "perspective", this.unit(perspective, 'px'));
     },
     bgColor: function (color) {
       return this.strProperties("background", color);

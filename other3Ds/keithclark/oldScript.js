@@ -35,7 +35,7 @@ var CssUtils = (function() {
 }());
 
 
-/* Triplet
+/* XYZ
  -------------------------------------------------- */
 
 function Triplet( x, y, z ) {

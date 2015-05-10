@@ -4,8 +4,8 @@
 /**
  * Face is any object contains does props, not necessarily part of the DOM
  * @param dimensions - Dimension2d
- * @param position - Triplet
- * @param rotation - Triplet
+ * @param position - XYZ
+ * @param rotation - XYZ
  * @constructor
  */
 function Face(dimensions,position,rotation) {
@@ -14,9 +14,10 @@ function Face(dimensions,position,rotation) {
   this.position = position;
   this.rotation = rotation;
 }
+
 /**
  * insert instance of Face to the DOM
- * @param parent - the instace will be DOM child of @parent
+ * @param parent - the instance will be DOM child of @parent
  * @param className
  */
 Face.prototype.insert = function(parent,className){
@@ -27,6 +28,37 @@ Face.prototype.insert = function(parent,className){
     CssUtils.transform(this.position.x,this.position.y,this.position.z,this.rotation.x,this.rotation.y,this.rotation.z)
   );
 };
+
+/**
+ * holder element
+ * the element has no size - relevant sizes will be given to child Faces
+ * @param dimensions3D
+ * @param position
+ * @param rotation
+ * @constructor
+ */
+function Element3D(dimensions3D,position,rotation){
+  this.width = dimensions3D.w;
+  this.height = dimensions3D.h;
+  this.depth = dimensions3D.d;
+  this.position = position;
+  this.rotation = rotation;
+}
+
+/**
+ * @param parent
+ * @param className
+ */
+Element3D.prototype.insertHolder = function(parent,className){
+  this.node = HtmlUtils.createElem(parent.node,null,className);
+  CssUtils.inject(this.node,
+    CssUtils.base(),
+    CssUtils.transform(this.position.x,this.position.y,this.position.z,this.rotation.x,this.rotation.y,this.rotation.z)
+  );
+};
+
+
+
 
 /**
  * inherits from Face, and automatically inserts a square to dom
@@ -105,6 +137,8 @@ function Shape(parent,dimensions,position,rotation,cutterPosition,cutterRotation
  * @constructor
  */
 function EqTri(parent, dimensions, position, rotation){
+  //Face.call(this,dimensions,position,rotation);
+
   this.node = HtmlUtils.createElem(parent.node,null,'eqTri');
   this.width = dimensions.w;
   this.height = dimensions.h;
@@ -115,10 +149,10 @@ function EqTri(parent, dimensions, position, rotation){
 
   //var top = Math.sqrt(2*Math.pow(this.width,2));
 
-  var left = new Shape(parent,dimensions,position,rotation,{top:31.8,left:68.0},deg);
+  var left = new Shape(this,dimensions,position,rotation,{top:31.8,left:68.0},deg);
   //sould be filler - top: 7%; left: -74%
 
-  var right = new Shape(parent,dimensions,position,rotation,{top:31.8,left:-68.0},-deg);
+  var right = new Shape(this,dimensions,position,rotation,{top:31.8,left:-68.0},-deg);
 //l(CssUtils.origin('bottom ', 'left',' '))
   CssUtils.inject(left.cutter,
     CssUtils.absolutePosition(0,0),
@@ -137,3 +171,92 @@ function EqTri(parent, dimensions, position, rotation){
   //HtmlUtils.createElem(this.node,null,'cutter');
 }
 
+/**
+ * ClippedElement - front and rear use css's clip-path:polygon(coordinates),
+ * texture is background-image - background-color not working with clip-path:polygon
+ * shell is created according to same coordinates with normal Faces (not clipped)
+ *
+ * @param parent
+ * @param dimensions
+ * @param position
+ * @param rotation
+ * @param coordinates :: array of arrays[x(deg),y(deg)]
+ * @param texture
+ * @constructor
+ */
+function ClippedElement(parent,dimensions,position,rotation,coordinates,texture) {
+
+
+  Element3D.call(this,dimensions,position,rotation);
+  Element3D.prototype.insertHolder.call(this,parent,'letter_y');
+
+
+  /**
+   * insert faces,
+   * add texture and backface:'hidden'
+   * @param face
+   */
+  function insert(face) {
+    face.insert(this,null);
+    CssUtils.inject(face.node,
+      //CssUtils.backface(true),
+      CssUtils.bgImageCover(texture)
+    );
+  }
+
+  this.texture = texture;
+
+  this.front = new Face(
+    new Dimension2d(this.width,this.height),
+    new XYZ(0,0,this.depth/2),
+    new XYZ()
+  );
+
+  this.rear = new Face(
+    new Dimension2d(this.width,this.height),
+    new XYZ(0,0,-this.depth/2),
+    new XYZ(0, 180, 0)
+  );
+
+  //inser front and rear
+  [this.rear,this.front].forEach(function (face) {
+    insert.call(this,face);
+    //add clip path to front and rear
+    CssUtils.inject(face.node,
+      CssUtils.clipPath(coordinates)
+    );
+  }.bind(this));
+
+  //loop over coordinates, create Face to connect them
+  //this becomes the shell
+  this.shell = [];
+  for(var i=0, startX=0, startY=0;
+      i< coordinates.length;
+      i++){
+
+    //when i is in the last coordinate - next is the first one
+    var next = coordinates[i+1]? i+1 : 0;
+    var points = GeneralUtils.pointsDistance(new XY(coordinates[i]),new XY(coordinates[next]));
+
+    var shellFaceWidth = this.width * points.dist /100;
+    var positionX = -this.width/2 +  shellFaceWidth/2 + startX;
+    var positionY = -this.width/2 +  startY;
+
+    this.shell[i] = new Face(
+      new Dimension2d(shellFaceWidth,this.depth),
+      new XYZ(positionX,positionY,0),
+      new XYZ(90,points.deg,0)
+    );
+
+    insert.call(this,this.shell[i]);
+    //shell faces ;
+    CssUtils.inject(this.shell[i].node,
+      CssUtils.origin(0,50,0)
+    );
+
+    //update startX and startY for next irritation
+    var tr = GeneralUtils.getTrigo(points.deg);
+    startX += shellFaceWidth*tr.cos;
+    startY += shellFaceWidth*tr.sin;
+  }
+}

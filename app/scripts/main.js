@@ -1,8 +1,13 @@
 
+/* Textures -------------------------------------------------- */
+var TEXTURES = {
+  STONE: '../images/stone.png'
+};
+
 /* Viewport -------------------------------------------------- */
 
 function Viewport() {
-  this.perspective = 700; //px
+  this.perspective = 1700; //px
   this.node = HtmlUtils.createElem('body','viewport2')
   CssUtils.inject(
     this.node,
@@ -15,7 +20,7 @@ function Viewport() {
 
 function Camera(vp) {
   this.node = HtmlUtils.createElem(vp.node, 'camera2');
-  this.rotation = new Triplet();
+  this.rotation = new XYZ();
   this.perspective = vp.perspective;
   CssUtils.inject( this.node, CssUtils.base() );
 }
@@ -31,7 +36,7 @@ Camera.prototype = {
 
 function World(cameraNode) {
   this.node = HtmlUtils.createElem(cameraNode, 'world2');
-  this.position = new Triplet();
+  this.position = new XYZ();
   CssUtils.inject( this.node, CssUtils.base() );
 }
 
@@ -41,17 +46,17 @@ World.prototype = {
   updatePosition: function (pos) {
     this.position = pos;
     CssUtils.inject(this.node, CssUtils.transform(pos.x,pos.y,pos.z,0,0,0) );
-  },
-  createRoom: function (position,dimensions,id) {
-    new Room(this.node,position,dimensions,id)
-  }
+  }//,
+  //createRoom: function (position,dimensions,id) {
+  //  new Room(this.node,position,dimensions,id)
+  //}
 };
 
 /* Room -------------------------------------------------- */
 
 function Room(worldNode,position,dimensions,id) {
   this.node = HtmlUtils.createElem(worldNode, id ,'room');
-  this.position = position || new Triplet();
+  this.position = position || new XYZ();
   this.dim = dimensions || new Dimension3d();
   CssUtils.inject(
     this.node,
@@ -60,41 +65,41 @@ function Room(worldNode,position,dimensions,id) {
   );
 
   this.left = new Square(this,
-    new Dimension2d(this.dim.l, this.dim.h),
-    new Triplet(-this.dim.w / 2, 0, 0),
-    new Triplet(0, 90, 0),
+    new Dimension2d(this.dim.d, this.dim.h),
+    new XYZ(-this.dim.w / 2, 0, 0),
+    new XYZ(0, 90, 0),
     'yellow');
   this.right = new Square(this,
-    new Dimension2d(this.dim.l, this.dim.h),
-    new Triplet(this.dim.w / 2, 0, 0),
-    new Triplet(0, -90, 0),
+    new Dimension2d(this.dim.d, this.dim.h),
+    new XYZ(this.dim.w / 2, 0, 0),
+    new XYZ(0, -90, 0),
     'blue');
   this.front = new Square(this,
     new Dimension2d(this.dim.w, this.dim.h),
-    new Triplet(0, 0, -this.dim.l / 2),
-    new Triplet(0, 0, 0),
+    new XYZ(0, 0, -this.dim.d / 2),
+    new XYZ(0, 0, 0),
     'brown');
   this.rear = new Square(this,
     new Dimension2d(this.dim.w, this.dim.h),
-    new Triplet(0, 0, this.dim.l / 2),
-    new Triplet(180, 0, 0),
+    new XYZ(0, 0, this.dim.d / 2),
+    new XYZ(180, 0, 0),
     'pink');
   this.ceiling = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.l),
-    new Triplet(0, -this.dim.h / 2, 0),
-    new Triplet(-90, 0, 0),
+    new Dimension2d(this.dim.w, this.dim.d),
+    new XYZ(0, -this.dim.h / 2, 0),
+    new XYZ(-90, 0, 0),
     'purple');
   this.floor = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.l),
-    new Triplet(0, this.dim.h / 2, 0),
-    new Triplet(90, 0, 0),
+    new Dimension2d(this.dim.w, this.dim.d),
+    new XYZ(0, this.dim.h / 2, 0),
+    new XYZ(90, 0, 0),
     'green');
 
 
   var test = new EqTri(this.front,
     new Dimension2d(100, 100),
-    new Triplet(50, 50, 0),
-    new Triplet(0, 0, 0)
+    new XYZ(50, 50, 0),
+    new XYZ(0, 0, 0)
   );
 
 
@@ -116,14 +121,26 @@ function Room(worldNode,position,dimensions,id) {
 window.onload = function() {
 //$(document).ready(function () {
 
-  var zeroTriplet = new Triplet();
+  var zeroTriplet = new XYZ();
   var vp = new Viewport();
   var cam = new Camera(vp);
-  cam.updateRotation(new Triplet());
+  cam.updateRotation(new XYZ());
   var world = new World(cam.node);
-  world.updatePosition(new Triplet());
-  world.createRoom(new Triplet(),new Dimension3d(2000,1000,1500),'first-room');
+  world.updatePosition(new XYZ(-100,0,-640));
 
+  var roomHeight = 2000;
+  var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');
+
+  var letterHeight = 400;
+  var letterDepth = 100;
+  var y1 =
+    new ClippedElement(room1,
+      new Dimension3d(letterHeight,letterHeight,letterDepth),
+      new XYZ(100,roomHeight/2 - letterHeight/2,100),
+      new XYZ(0,0,0),
+      LetterCoordinates.Y,
+      TEXTURES.STONE
+    );
 
   function move(direction) {
     console.log('move ' + direction)
