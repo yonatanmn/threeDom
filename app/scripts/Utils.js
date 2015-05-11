@@ -34,14 +34,19 @@ var GeneralUtils = function () {
     pointsDistance: function (a,b) {
       var deltaX = b.x - a.x;
       var deltaY = b.y - a.y;
-      var degrees =  GeneralUtils.toDegrees(Math.atan(deltaY/deltaX));
+      var rad = Math.atan2(deltaY,deltaX);
+      //rad += deltaX<0? Math.PI : 0;
+
+
+      var degrees =  GeneralUtils.toDegrees(rad);
       //atan returns degree between -90 to 90, this fixes it:
-      degrees += deltaX<0? 180 : 0;
+      //degrees += deltaX<0? 180 : 0;
       return {
         delX : deltaX,
         delY : deltaY,
         dist : Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2)),
-        deg: degrees
+        deg: degrees,
+        rad: rad
 
       }
     },

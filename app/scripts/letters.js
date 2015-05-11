@@ -1,91 +1,74 @@
 /**
- * [aPt],[bPt] -> [a],[m],[b]
- * @param a = XY
- * @param b = XY
- * @param softener
+ * :: [[a],[b]] -> [[a],[]...,[b]]
+ * @param a [[],[]] (coord)
+ * @param b [[],[]] (coord)
+ * @param steepness {int} between 0-1. 1 is half circle, 0.01 is almost straight line
+ * @param resolution {int} from 1 to inf, number of new points = softness of roundness (low num is more edgy),
+ * @param toOutside {bool} - roundness direction (belly-inward/ back-outward)
+ * @returns {*[]} - [a,new points...,b]
  */
-function addRoundness(a,b,softener,newPtsNum){
-  //log(arr)
-
+function addRoundness(a,b,steepness,resolution,toOutside) {
   var aPt = new XY(a);
   var bPt = new XY(b);
-  //console.log('sdfsdf')
-  //console.log(b)
- //log(a)
- //log(b)
   var pts = GeneralUtils.pointsDistance(aPt,bPt);
-  //log(pts)
-  //log(a.x + pts.delX/2)
-  //log(a.y + pts.delY/2)
-  //var distance = pts.dist * radius / 100;
-  var distance = pts.dist/2;
+
+  //ellipse
+  var ell = {
+    w: pts.dist/2,
+    h: pts.dist/2 * steepness
+  };
 
   var center = new XY((aPt.x + pts.delX/2),(aPt.y + pts.delY/2));
+  var ang = pts.rad;
 
-  var divider = 180/(newPtsNum+1)
-  var newPoint;
   var newCords=[a];
-  //log(center)
-  //log(pts.deg)
-  //log(divider)
-  //log(distance)
 
-  for(var i= 1,radiusAgnle,soften; i<=newPtsNum; i++){
-    //radiusAgnle = 180 + divider*i + pts.deg ;
-    radiusAgnle = 180 - divider*i + pts.deg ;
-    //soften = Math.cos(Math.sin(GeneralUtils.toRadians(radiusAgnle)) * Math.sin(GeneralUtils.toRadians(radius)))
-    soften = softener *  Math.sin(GeneralUtils.toRadians(radiusAgnle))
-    soften = 0.6 *  Math.sin(GeneralUtils.toRadians(radiusAgnle))
-    //log(radiusAgnle)
-    //log(soften)
-    //var newDist = distance -  distance * soften;
-    //log(newDist)
+  for(var i= 1,T ,
+        acosT, bsinT,
+        sina = Math.sin(ang), cosa = Math.cos(ang);
+      i<=resolution; i++) {
 
-    //var newDist =distance *  Math.cos(softener * Math.PI/2*(Math.sin(GeneralUtils.toRadians(radiusAgnle))))
-var newDist = distance - distance * 0.5 * Math.sqrt(0.75 - Math.sin(GeneralUtils.toRadians(radiusAgnle)))
+    //draw pont from center using T as changing angle (eg. 150,120,90,60,30)
+    T = Math.PI - Math.PI/(resolution+1)* i;// + ang;
 
-    newPoint = GeneralUtils.getNewPointByDistAndAngle(center,radiusAgnle,  distance)
-    //log(newPoint.y)
-    //log(soften)
+    //angle direction will determine belly/back
+    if(toOutside){T=-T}
 
-    log(GeneralUtils.getTrigo(pts.deg))
-    var trig= GeneralUtils.getTrigo(pts.deg)
+    acosT = ell.w * Math.cos(T);
+    bsinT = ell.h * Math.sin(T);
 
-    newPoint.y -= /* Math.cos*/(newPoint.y  *  (0.6 /*  * (Math.sin(GeneralUtils.toRadians(radiusAgnle)))*/))
-    newPoint.x -=  Math.sin(newPoint.x  *  (0.6 /* * (Math.cos(GeneralUtils.toRadians(radiusAgnle)))*/))
-    //newPoint.x = newPoint.x  * Math.abs(soften)
+    //create point on ellipe [acosT,bsinT] and rotate with rotation matrix
+    var  x = cosa * ( acosT ) - sina * ( bsinT);  //x
+    var  y = sina * ( acosT ) + cosa * ( bsinT);   //y
 
-    //log(newPoint.y)
-    //newPoint.x = newPoint.x  - newPoint.x * 0.6 * Math.sin(GeneralUtils.toRadians(90))
-
-    //newPoint = GeneralUtils.getNewPointByDistAndAngle(center,(180 + divider*i + pts.deg ),distance)
-    //var x =Math.cos(GeneralUtils.toRadians(radiusAgnle));
-    //newPoint = {
-    //  x: x,
-    //  y:0.5*(2*Math.sqrt(1-Math.pow(x,2))-1)
-    //
-    //}
-
-
-    newCords.push([newPoint.x,newPoint.y])
+    // move that with relation to center
+    // push
+    newCords.push([
+      x + center.x,
+      y + center.y
+    ]);
 
   }
+
   newCords.push(b);
 
-  log((newCords))
   return(newCords);
 
 }
 
+
 var LetterCoordinates= {
-  Y2: [[0, 0],[30, 0], [50, 30], [70, 0], [100, 0], [65, 55], [65, 100], [35, 100], [35, 55]],
-  Y:
+  Y: [[0, 0],[30, 0], [50, 30], [70, 0], [100, 0], [65, 55], [65, 100], [35, 100], [35, 55]],
+  Ytest:
     []
-    .concat(addRoundness([0, 0],[30, 0],0.9,12))
-    .concat(addRoundness([50, 30],[70, 0],0.9,12))
-    //.concat(addRoundness([ ],50,3))
-    //.concat([[100,0], [65,55]])
-    .concat([[100,0],[65,55],[65, 100], [35, 100], [35, 55]])
+    .concat(addRoundness([0, 0],[30, 0],0.2,14,false))
+    .concat(addRoundness([50, 30],[70, 0],0.9,12,false))
+    //.concat([[50,30], [70,0]])
+    .concat([[100,0],[65,55],[65, 100], [35, 100], [35, 55]]),
+  C: []
+    .concat(addRoundness([100, 100],[100, 0],1,14,true))
+    .concat(addRoundness([100, 20],[100, 80],1,14,false))
+    //.concat([[50,30], [70,0]])
 };
 //addRoundness(LetterCoordinates.Y,3,20,3);
 //addRoundness([50, 30], [70, 0],50,2)
