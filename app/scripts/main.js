@@ -138,7 +138,7 @@ window.onload = function() {
       new Dimension3d(letterHeight,letterHeight,letterDepth),
       new XYZ(300,/*roomHeight/2 - letterHeight/2*/200,50),
       new XYZ(0,0,0),
-      LetterCoordinates.Y,
+      LetterCoordinates.G,
       TEXTURES.STONE
     );
   var c1 =
@@ -147,6 +147,14 @@ window.onload = function() {
       new XYZ(-100,/*roomHeight/2 - letterHeight/2*/200,50),
       new XYZ(0,0,0),
       LetterCoordinates.C,
+      TEXTURES.STONE
+    );
+  var o1 =
+    new ClippedElement(room1,
+      new Dimension3d(letterHeight,letterHeight,letterDepth),
+      new XYZ(-300,/*roomHeight/2 - letterHeight/2*/200,50),
+      new XYZ(0,0,0),
+      LetterCoordinates.O,
       TEXTURES.STONE
     );
 

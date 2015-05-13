@@ -231,7 +231,7 @@ function ClippedElement(parent,dimensions,position,rotation,coordinates,texture)
   //loop over coordinates, create Face to connect them
   //this becomes the shell
   this.shell = [];
-  console.log(coordinates[0][0],coordinates[0][1])
+  //console.log(coordinates[0][0],coordinates[0][1])
   for(var i=0, startX=coordinates[0][0]*4, startY=coordinates[0][1]*4 ;
       i< coordinates.length;
       i++){
