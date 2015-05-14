@@ -126,7 +126,7 @@ window.onload = function() {
   var cam = new Camera(vp);
   cam.updateRotation(new XYZ());
   var world = new World(cam.node);
-  world.updatePosition(new XYZ(-100,0,-640));
+  world.updatePosition(new XYZ(-100,0,-1240));
 
   var roomHeight = 2000;
   var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');

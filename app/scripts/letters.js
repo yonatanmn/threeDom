@@ -56,7 +56,7 @@ function addRoundness(a,b,steepness,resolution,toOutside) {
 
 }
 
-var rndnss =  4;
+var rndnss =  14;
 var ltrWdth = 20;
 var LetterCoordinates= {
   Y: [[0, 0],[30, 0], [50, 30], [70, 0], [100, 0], [65, 55], [65, 100], [35, 100], [35, 55]],
@@ -85,12 +85,14 @@ var LetterCoordinates= {
   ),
   G:[].concat(
     //[[100-ltrWdth,20]],
-    addRoundness([100,15], [0,85],1,rndnss,false),
-    addRoundness([0,50.1], [100,50],1,rndnss,true),
-    [[60,50],[60,50+ltrWdth]],
-    addRoundness([100-ltrWdth,60],[ltrWdth,50],1,rndnss,false),
-    addRoundness([ltrWdth,50.1],[100-ltrWdth,20],1,rndnss,false)
-
+    addRoundness([100,ltrWdth+15], [50,0],0.4,rndnss,false),
+    addRoundness([50.1,0], [50,100],1,rndnss,false),
+    addRoundness([50.1,100], [100,50],0.35,rndnss,false),
+    [[50,50],[50,50+ltrWdth*0.9]],
+    addRoundness([100-ltrWdth-5,50+ltrWdth*0.9],[50,100-ltrWdth],0.35,rndnss,true),
+    addRoundness([50.1,100-ltrWdth],[50,ltrWdth],1,rndnss,true),
+    addRoundness([50.1,ltrWdth],[100-10,ltrWdth+15+5],0.23,rndnss,true)
+    //[[100-10,ltrWdth+15+5]
   )
 
 };
