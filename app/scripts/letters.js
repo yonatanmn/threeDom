@@ -41,13 +41,17 @@ function addRoundness(a,b,steepness,resolution,toOutside) {
     var  x = cosa * ( acosT ) - sina * ( bsinT);  //x
     var  y = sina * ( acosT ) + cosa * ( bsinT);   //y
 
+
+    function parse2(num){
+      return parseFloat(Math.round(num * 100) / 100).toFixed(2);
+
+    }
     // move that with relation to center
     // push
     newCords.push([
-      x + center.x,
-      y + center.y
+       parse2(x + center.x),
+      parse2(y + center.y)
     ]);
-
   }
 
   newCords.push(b);
@@ -76,6 +80,12 @@ var LetterCoordinates= {
     addRoundness([100-ltrWdth,50],[ltrWdth,50],1,rndnss,false),
     addRoundness([ltrWdth,50.1],[100-ltrWdth,50],1,rndnss,false)
   ),
+  T:[].concat(
+    [[50-ltrWdth/2,100],[50-ltrWdth/2,ltrWdth],[50-3/2*ltrWdth,ltrWdth],[50-3/2*ltrWdth,0],[50+3/2*ltrWdth,0],[50+3/2*ltrWdth,ltrWdth],[50+ltrWdth/2,ltrWdth],[50+ltrWdth/2,100]]
+  ),
+  A:[].concat(
+    [[80,100],[50,30],[37,60],[63,60],[69,74],[32,74],[20,100],[0,100],[50,0],[100,100]]
+  ),
   U:[].concat(
     [[100,0]],
     addRoundness([100,50],[0,50],1,rndnss,true),
@@ -83,22 +93,26 @@ var LetterCoordinates= {
     addRoundness([ltrWdth,50],[100-ltrWdth,50],1,rndnss,false),
     [[100-ltrWdth,0]]
   ),
+  L:[].concat(
+    [[0,0],[0,100],[50,100],[50,100-ltrWdth],[ltrWdth,100-ltrWdth],[ltrWdth,0]]
+  ),
+  V:[].concat(
+    [[0,0],[50,100],[100,0],[100-ltrWdth,0],[50,64],[ltrWdth,0]]
+  ),
+  E:[].concat(
+    [[0,0],[0,100],[50,100],[50,100-ltrWdth],[ltrWdth,100-ltrWdth],[ltrWdth,50+ltrWdth/2],[50,50+ltrWdth/2],[50,50-ltrWdth/2],[ltrWdth,50-ltrWdth/2],[ltrWdth,ltrWdth],[50,ltrWdth],[50,0]]
+  ),
+  F:[].concat(
+    [[0,0],[0,100],[ltrWdth,100],[ltrWdth,50+ltrWdth/2],[50,50+ltrWdth/2],[50,50-ltrWdth/2],[ltrWdth,50-ltrWdth/2],[ltrWdth,ltrWdth],[50,ltrWdth],[50,0]]
+  ),
   G:[].concat(
-    //[[100-ltrWdth,20]],
-    addRoundness([100,ltrWdth+15], [50,0],0.4,rndnss,false),
-    addRoundness([50.1,0], [50,100],1,rndnss,false),
-    addRoundness([50.1,100], [100,50],0.35,rndnss,false),
-    [[50,50],[50,50+ltrWdth*0.9]],
-    addRoundness([100-ltrWdth-5,50+ltrWdth*0.9],[50,100-ltrWdth],0.35,rndnss,true),
-    addRoundness([50.1,100-ltrWdth],[50,ltrWdth],1,rndnss,true),
-    addRoundness([50.1,ltrWdth],[100-10,ltrWdth+15+5],0.23,rndnss,true)
-    //[[100-10,ltrWdth+15+5]
+    [[100-20,0]],
+    addRoundness([50,0], [50,100],1,rndnss,false),
+    [[55.23,99.73],[65.45,97.55],[75,93.3], [83.46,87.16], [90.45,79.39],[95.68,70.34],[98.91,60.4], [100,50]],
+    [[55,50],[50,50+ltrWdth*0.8]],
+    addRoundness([100-ltrWdth-2,50+ltrWdth*0.8],[50,100-ltrWdth+2],0.3,rndnss*0.5,true),
+    addRoundness([45,100-ltrWdth+1],[50+5,ltrWdth],1,rndnss,true),
+    [[100-20-10,ltrWdth]]
   )
-
 };
-//addRoundness(LetterCoordinates.Y,3,20,3);
-//addRoundness([50, 30], [70, 0],50,2)
-
-//log(CssUtils.clipPath(LetterCoordinates.Y))
-
 

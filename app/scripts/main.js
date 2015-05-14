@@ -138,7 +138,7 @@ window.onload = function() {
       new Dimension3d(letterHeight,letterHeight,letterDepth),
       new XYZ(300,/*roomHeight/2 - letterHeight/2*/200,50),
       new XYZ(0,0,0),
-      LetterCoordinates.G,
+      LetterCoordinates.F,
       TEXTURES.STONE
     );
   var c1 =
