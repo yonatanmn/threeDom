@@ -30,6 +30,33 @@ Face.prototype.insert = function(parent,className){
 };
 
 /**
+ * currently - not working with X Z rotations of parent
+ * @param parent
+ * @param position
+ * @param opacity
+ * @param clipPath
+ * @constructor
+ */
+function Shadow(parent,position,opacity,clipPath){
+  Face.call(this,new Dimension2d('100%','100%'),position,new XYZ(-90,0,0));
+
+  this.opacity = opacity;
+
+  clipPath = clipPath? CssUtils.clipPath(clipPath): '';
+
+  this.node = HtmlUtils.createElem(parent.node);
+  CssUtils.inject(this.node,
+    CssUtils.size(this.width,this.height),
+    CssUtils.transform(this.position.x,this.position.y,this.position.z,this.rotation.x,this.rotation.y,this.rotation.z),
+    CssUtils.origin(0,100,0), //bottom
+    CssUtils.bgImage(TEXTURES.SHADOW),
+    CssUtils.opacity(this.opacity),
+    clipPath
+  );
+}
+
+
+/**
  * holder element
  * the element has no size - relevant sizes will be given to child Faces
  * @param dimensions3D
@@ -126,8 +153,8 @@ function Shape(parent,dimensions,position,rotation,cutterPosition,cutterRotation
 
 }
 
-//EquilateralTriangle
 /**
+ * EquilateralTriangle
  * two instances of Shapes that are 30-60-90 triangle, one next to each other,
  * in order to create one 60-60-60 triangle
  * @param parent
@@ -172,7 +199,7 @@ function EqTri(parent, dimensions, position, rotation){
 }
 
 /**
- * ClippedElement - front and rear use css's clip-path:polygon(coordinates),
+ * Prism - front and rear use css's clip-path:polygon(coordinates),
  * texture is background-image - background-color not working with clip-path:polygon
  * shell is created according to same coordinates with normal Faces (not clipped)
  *
@@ -184,7 +211,7 @@ function EqTri(parent, dimensions, position, rotation){
  * @param texture
  * @constructor
  */
-function ClippedElement(parent,dimensions,position,rotation,coordinates,texture) {
+function Prism(parent,dimensions,position,rotation,coordinates,texture) {
 
 
   Element3D.call(this,dimensions,position,rotation);
@@ -200,7 +227,7 @@ function ClippedElement(parent,dimensions,position,rotation,coordinates,texture)
     face.insert(this,null);
     CssUtils.inject(face.node,
       //CssUtils.backface(true),
-      CssUtils.bgImageCover(texture)
+      CssUtils.bgImage(texture)
     );
   }
 
@@ -224,7 +251,7 @@ function ClippedElement(parent,dimensions,position,rotation,coordinates,texture)
     //add clip path to front and rear
     CssUtils.inject(face.node,
       CssUtils.clipPath(coordinates),
-    CssUtils.bgImageCover(('http://i.imgur.com/IEiqEV0.jpg'))
+    CssUtils.bgImage(('http://i.imgur.com/IEiqEV0.jpg'))
     );
   }.bind(this));
 

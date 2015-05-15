@@ -159,9 +159,9 @@ var CssUtils = function() {
       )
     },
 
-    bgImageCover: function(url) {
+    bgImage: function(url,size) {
       return this.strProperties(
-        ['background-size', 'cover'],
+        ['background-size', size?size:'cover'],
         ['background-image', this.strInnerProperties('url',url)]
       )
     },
@@ -174,6 +174,13 @@ var CssUtils = function() {
           )
         )
       );
+    },
+
+    /**
+     * @param amount {int} :  0 - 1
+     */
+    opacity: function (amount) {
+      return this.strProperties('opacity',amount)
     },
 
     origin: function(x, y, z) {

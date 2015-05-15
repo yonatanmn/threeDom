@@ -1,7 +1,9 @@
 
 /* Textures -------------------------------------------------- */
 var TEXTURES = {
-  STONE: '../images/stone.png'
+  STONE: '../images/stone.png',
+  GRASS: '../images/grass3.jpg',
+  SHADOW: '../images/blackbox.jpeg'
 };
 
 /* Viewport -------------------------------------------------- */
@@ -53,57 +55,57 @@ World.prototype = {
 };
 
 /* Room -------------------------------------------------- */
-
-function Room(worldNode,position,dimensions,id) {
-  this.node = HtmlUtils.createElem(worldNode, id ,'room');
-  this.position = position || new XYZ();
-  this.dim = dimensions || new Dimension3d();
-  CssUtils.inject(
-    this.node,
-    CssUtils.base(),
-    CssUtils.transform(this.position.x,this.position.y,this.position.z,0,0,0)
-  );
-
-  this.left = new Square(this,
-    new Dimension2d(this.dim.d, this.dim.h),
-    new XYZ(-this.dim.w / 2, 0, 0),
-    new XYZ(0, 90, 0),
-    'yellow');
-  this.right = new Square(this,
-    new Dimension2d(this.dim.d, this.dim.h),
-    new XYZ(this.dim.w / 2, 0, 0),
-    new XYZ(0, -90, 0),
-    'blue');
-  this.front = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.h),
-    new XYZ(0, 0, -this.dim.d / 2),
-    new XYZ(0, 0, 0),
-    'brown');
-  this.rear = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.h),
-    new XYZ(0, 0, this.dim.d / 2),
-    new XYZ(180, 0, 0),
-    'pink');
-  this.ceiling = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.d),
-    new XYZ(0, -this.dim.h / 2, 0),
-    new XYZ(-90, 0, 0),
-    'purple');
-  this.floor = new Square(this,
-    new Dimension2d(this.dim.w, this.dim.d),
-    new XYZ(0, this.dim.h / 2, 0),
-    new XYZ(90, 0, 0),
-    'green');
-
-
-  var test = new EqTri(this.front,
-    new Dimension2d(100, 100),
-    new XYZ(50, 50, 0),
-    new XYZ(0, 0, 0)
-  );
-
-
-}
+//
+//function Room(worldNode,position,dimensions,id) {
+//  this.node = HtmlUtils.createElem(worldNode, id ,'room');
+//  this.position = position || new XYZ();
+//  this.dim = dimensions || new Dimension3d();
+//  CssUtils.inject(
+//    this.node,
+//    CssUtils.base(),
+//    CssUtils.transform(this.position.x,this.position.y,this.position.z,0,0,0)
+//  );
+//
+//  this.left = new Square(this,
+//    new Dimension2d(this.dim.d, this.dim.h),
+//    new XYZ(-this.dim.w / 2, 0, 0),
+//    new XYZ(0, 90, 0),
+//    'yellow');
+//  this.right = new Square(this,
+//    new Dimension2d(this.dim.d, this.dim.h),
+//    new XYZ(this.dim.w / 2, 0, 0),
+//    new XYZ(0, -90, 0),
+//    'blue');
+//  this.front = new Square(this,
+//    new Dimension2d(this.dim.w, this.dim.h),
+//    new XYZ(0, 0, -this.dim.d / 2),
+//    new XYZ(0, 0, 0),
+//    'brown');
+//  this.rear = new Square(this,
+//    new Dimension2d(this.dim.w, this.dim.h),
+//    new XYZ(0, 0, this.dim.d / 2),
+//    new XYZ(180, 0, 0),
+//    'pink');
+//  this.ceiling = new Square(this,
+//    new Dimension2d(this.dim.w, this.dim.d),
+//    new XYZ(0, -this.dim.h / 2, 0),
+//    new XYZ(-90, 0, 0),
+//    'purple');
+//  this.floor = new Square(this,
+//    new Dimension2d(this.dim.w, this.dim.d),
+//    new XYZ(0, this.dim.h / 2, 0),
+//    new XYZ(90, 0, 0),
+//    'green');
+//
+//
+//  var test = new EqTri(this.front,
+//    new Dimension2d(100, 100),
+//    new XYZ(50, 50, 0),
+//    new XYZ(0, 0, 0)
+//  );
+//
+//
+//}
 
 /*World.prototype = {
   updatePosition: function (pos) {
@@ -119,40 +121,48 @@ function Room(worldNode,position,dimensions,id) {
 
 /*-----------------------*/
 window.onload = function() {
-//$(document).ready(function () {
 
-  var zeroTriplet = new XYZ();
+  //var zeroTriplet = new XYZ();
   var vp = new Viewport();
   var cam = new Camera(vp);
   cam.updateRotation(new XYZ());
   var world = new World(cam.node);
-  world.updatePosition(new XYZ(-100,0,-1240));
+  world.updatePosition(new XYZ(0,700,0));
 
-  var roomHeight = 2000;
-  var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');
+  //var roomHeight = 2000;
+  //var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');
+
+  var field = new Square(world,new Dimension2d(10000,10000),new XYZ(0,200,0),new XYZ(90,0,0),'');
+
+  CssUtils.inject(field.node,
+    CssUtils.bgImage(TEXTURES.GRASS,'1000px')
+  );
 
   var letterHeight = 400;
   var letterDepth = 100;
   var y1 =
-    new ClippedElement(room1,
+    new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
-      new XYZ(300,/*roomHeight/2 - letterHeight/2*/200,50),
+      new XYZ(300,0,50),
       new XYZ(0,0,0),
       LetterCoordinates.D,
       TEXTURES.STONE
     );
+
+  y1.Shadow = new Shadow(y1.rear, new XYZ(0,-2,letterDepth/2),'0.3',LetterCoordinates.D);
+
   var c1 =
-    new ClippedElement(room1,
+    new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
-      new XYZ(-100,/*roomHeight/2 - letterHeight/2*/200,50),
+      new XYZ(-100,0,50),
       new XYZ(0,0,0),
       LetterCoordinates.C,
       TEXTURES.STONE
     );
   var o1 =
-    new ClippedElement(room1,
+    new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
-      new XYZ(-300,/*roomHeight/2 - letterHeight/2*/200,50),
+      new XYZ(-300,0,50),
       new XYZ(0,0,0),
       LetterCoordinates.O,
       TEXTURES.STONE
