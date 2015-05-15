@@ -105,6 +105,22 @@ var LetterCoordinates= {
   F:[].concat(
     [[0,0],[0,100],[ltrWdth,100],[ltrWdth,50+ltrWdth/2],[50,50+ltrWdth/2],[50,50-ltrWdth/2],[ltrWdth,50-ltrWdth/2],[ltrWdth,ltrWdth],[50,ltrWdth],[50,0]]
   ),
+  R:[].concat(
+    [[0,0]],
+    addRoundness([ltrWdth*2,0],[ltrWdth*2,50+ltrWdth/2],1,rndnss,true),
+    [[50+ltrWdth,100],[50,100],[ltrWdth,50+ltrWdth/2],[ltrWdth,50-ltrWdth/2]],
+    addRoundness([ltrWdth*2,50-ltrWdth/2],[ltrWdth*2,ltrWdth],1,rndnss,false),
+    [[ltrWdth,ltrWdth],[ltrWdth,100],[0,100]]
+  ),
+  N:[].concat(
+    [[0,0],[0,100],[ltrWdth,100],[ltrWdth,ltrWdth*1.5],[100-ltrWdth,100],[100,100],[100,0],[100-ltrWdth,0],[100-ltrWdth,100-ltrWdth*1.5],[ltrWdth,0]]
+  ),
+  D:[].concat(
+    [[0,0]],
+    addRoundness([ltrWdth,0],[ltrWdth,100],1,rndnss,true),
+    addRoundness([ltrWdth,100-ltrWdth],[ltrWdth,ltrWdth],1,rndnss,false),
+    [[ltrWdth,100],[0,100]]
+  ),
   G:[].concat(
     [[100-20,0]],
     addRoundness([50,0], [50,100],1,rndnss,false),
