@@ -1,9 +1,9 @@
 
 /* Textures -------------------------------------------------- */
 var TEXTURES = {
-  STONE: '../images/stone.png',
-  GRASS: '../images/grass3.jpg',
-  SHADOW: '../images/blackbox.jpeg'
+  STONE: './images/stone.png',
+  GRASS: './images/grass3.jpg',
+  SHADOW: './images/blackbox.jpeg'
 };
 
 /* Viewport -------------------------------------------------- */
