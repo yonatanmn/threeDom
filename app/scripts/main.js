@@ -129,6 +129,7 @@ window.onload = function() {
   var world = new World(cam.node);
   world.updatePosition(new XYZ(0,800,-5000));
 
+
   //var roomHeight = 2000;
   //var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');
 
@@ -137,6 +138,8 @@ window.onload = function() {
   CssUtils.inject(field.node,
     CssUtils.bgImage(TEXTURES.GRASS,'1000px')
   );
+
+  //var sign = new Square(world,new Dimension2d(10000,10000),new XYZ(0,200,0),new XYZ(90,0,0),'');
 
 
   var letterHeight = 400;

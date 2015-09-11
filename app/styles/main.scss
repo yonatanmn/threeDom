@@ -6,6 +6,28 @@ html {
   overflow: hidden
 }
 
+.instructions{
+  height: 100px;
+  width: 100px;
+  z-index: 10;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: rgb(0, 0, 0);
+  background-color: rgba(255, 255, 255, 0.54);
+  padding: 10px;
+  border: rgba(255, 255, 255, 0.39) 1px solid;
+  text-align: center;
+  .keys{
+    margin-bottom: 2px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .behavior{
+    margin-bottom: 10px;
+  }
+}
+
 .shape{
 //  border: 1px solid;
 //background: blue;
