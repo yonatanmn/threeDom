@@ -29,8 +29,8 @@ and
 grunt build
 ```
 
-Try to understand what I've done, and continue developing this cool engine.
+If you want to have fun with dom3D, try to understand what I've done, and continue developing this cool engine.
 
-Someday you'll build your kingDOM and live happily ever after.
+If you just want to have fun - playaround, the api is not that complicated, hopefully someday you'll build your kingDOM and live happily ever after.
 
 
