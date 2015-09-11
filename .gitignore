@@ -1,0 +1,8 @@
+node_modules
+app
+other3Ds
+.tmp
+.sass-cache
+bower_components
+.idea
+.gitignore
