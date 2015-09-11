@@ -13,7 +13,7 @@ function Viewport() {
   this.node = HtmlUtils.createElem('body','viewport2')
   CssUtils.inject(
     this.node,
-    'position: relative; overflow: hidden; width: 100%; height: 100%; background: #000;',
+    'position: relative; overflow: hidden; width: 100%; height: 100%; background: #100028;',
     CssUtils.perspective(this.perspective)
   );
 }
@@ -125,9 +125,9 @@ window.onload = function() {
   //var zeroTriplet = new XYZ();
   var vp = new Viewport();
   var cam = new Camera(vp);
-  cam.updateRotation(new XYZ());
+  cam.updateRotation(new XYZ(-10,0,60));
   var world = new World(cam.node);
-  world.updatePosition(new XYZ(0,700,0));
+  world.updatePosition(new XYZ(0,800,-5000));
 
   //var roomHeight = 2000;
   //var room1 = new Room(world.node, new XYZ(),new Dimension3d(4000,roomHeight,3500),'first-room');
@@ -138,9 +138,34 @@ window.onload = function() {
     CssUtils.bgImage(TEXTURES.GRASS,'1000px')
   );
 
+
   var letterHeight = 400;
   var letterDepth = 100;
-  var y1 =
+
+  var radius = 2000;
+  var partOfHalfCircle = 0.5; //half circle = 1;
+  ('THREEDOM').split('').forEach(function (letter,i,word) {
+    var wrdLngth = word.length;
+    var angle = (180/(wrdLngth-1)*(i)) * partOfHalfCircle + 90*(1 - partOfHalfCircle);
+
+    var trig = GeneralUtils.getTrigo(angle);
+
+    var xPos = -trig.cos * radius;
+    var zPos = trig.sin * radius;
+    var yRot = -90 + angle;
+
+    var threeDLetter = new Prism(world,
+      new Dimension3d(letterHeight,letterHeight,letterDepth),
+      new XYZ(xPos,0,zPos),
+      new XYZ(0,yRot,0),
+      LetterCoordinates[letter],
+      TEXTURES.STONE
+    );
+    threeDLetter.Shadow = new Shadow(threeDLetter.rear, new XYZ(0,-3,letterDepth/2),'0.3',LetterCoordinates[letter]);
+
+
+  });
+  /*var y1 =
     new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
       new XYZ(300,0,50),
@@ -151,23 +176,23 @@ window.onload = function() {
 
   y1.Shadow = new Shadow(y1.rear, new XYZ(0,-2,letterDepth/2),'0.3',LetterCoordinates.D);
 
-  var c1 =
+  var t1 =
     new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
       new XYZ(-100,0,50),
       new XYZ(0,0,0),
-      LetterCoordinates.C,
+      LetterCoordinates.T,
       TEXTURES.STONE
     );
-  var o1 =
+  var h1 =
     new Prism(world,
       new Dimension3d(letterHeight,letterHeight,letterDepth),
       new XYZ(-300,0,50),
       new XYZ(0,0,0),
-      LetterCoordinates.O,
+      LetterCoordinates.H,
       TEXTURES.STONE
     );
-
+*/
   function move(direction) {
     console.log('move ' + direction)
     var speed = 6;
